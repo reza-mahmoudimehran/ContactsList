@@ -5,7 +5,7 @@
     app:startDestination="@id/frgContactsList">
 
     <fragment
-        android:name="ir.reza_mahmoudi.contactslist.feature_contacts_list.presentation.ContactsListFragment"
+        android:name="ir.reza_mahmoudi.contactslist.feature_contacts.presentation.ContactsListFragment"
         android:id="@+id/frgContactsList"/>
 
 </navigation>

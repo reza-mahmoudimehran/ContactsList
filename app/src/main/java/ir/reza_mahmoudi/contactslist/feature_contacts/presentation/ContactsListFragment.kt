@@ -1,12 +1,14 @@
-package ir.reza_mahmoudi.contactslist.feature_contacts_list.presentation
+package ir.reza_mahmoudi.contactslist.feature_contacts.presentation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import ir.reza_mahmoudi.contactslist.R
 
+@AndroidEntryPoint
 class ContactsListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
