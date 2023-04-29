@@ -41,13 +41,18 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // Preferences DataStore
-    implementation "androidx.datastore:datastore-preferences:$datastore_version"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    // Preferences DataStore
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation  "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
