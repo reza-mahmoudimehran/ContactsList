@@ -15,7 +15,8 @@ import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.Conta
 )
 abstract class ContactsListDatabase : RoomDatabase() {
 
-    abstract fun contactsDao() : ContactsDao
+    abstract fun getContactsDao(): ContactsDao
+
     companion object {
         @Volatile
         private var INSTANCE: ContactsListDatabase? = null
