@@ -13,6 +13,6 @@ class ReadDataStoreItemUseCase <T> @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     @IoDispatcher dispatcher: CoroutineDispatcher
 ) : FlowUseCase<Preferences.Key<T>, T?>(dispatcher) {
-    override fun execute(parameters: Preferences.Key<T>): Flow<T?> =
+    override suspend fun execute(parameters: Preferences.Key<T>): Flow<T?> =
         dataStoreRepository.read(parameters)
 }

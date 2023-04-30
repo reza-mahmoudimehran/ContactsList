@@ -28,6 +28,7 @@ class ContactListObserver @Inject constructor(
     private val projection = arrayOf(
         ContactsContract.Contacts._ID,
         ContactsContract.Contacts.DISPLAY_NAME,
+        ContactsContract.CommonDataKinds.Phone.NUMBER,
         ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP
     )
 
@@ -38,24 +39,30 @@ class ContactListObserver @Inject constructor(
             val contactsLastTimestampDeferred = coroutineScope.async {
                 readDataStoreItemUseCase(PreferencesKeys.contactsLastTimestamp).first() ?: 0
             }
-            val lastTimestamp: Long = contactsLastTimestampDeferred.await()
+            var lastTimestamp: Long = contactsLastTimestampDeferred.await()
+            Log.e("contact s", "$lastTimestamp")
 
             // Query the contact list for contacts updated since the last observation
             val selection =
                 "${ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP} > $lastTimestamp"
-            Log.e("contact", "$lastTimestamp")
+            // Query the contact list for contacts updated since the last observation
+            val sortOrder =
+                "${ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP} DESC"
+
 
             val cursor: Cursor? = contentResolver.query(
                 contactsUri,
                 projection,
                 selection,
                 null,
-                null
+                sortOrder
             )
 
             launch {
                 cursor?.use { contactsCursor ->
                     if (contactsCursor.moveToFirst()) {
+                        lastTimestamp = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP))
+                        Log.e("contact", "$lastTimestamp")
                         // Contact list has changed, handle the changes here
                         do {
                             val contactId =
@@ -73,7 +80,7 @@ class ContactListObserver @Inject constructor(
                 saveDataStoreItemUseCase(
                     SaveDataStoreItemUseCase.Params.create(
                         PreferencesKeys.contactsLastTimestamp,
-                        System.currentTimeMillis()
+                        lastTimestamp
                     )
                 )
             }

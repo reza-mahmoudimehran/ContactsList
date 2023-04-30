@@ -10,8 +10,8 @@ import ir.reza_mahmoudi.contactslist.feature_contacts.util.constant.ContactsCons
     tableName = CONTACTS_TABLE_NAME
 )
 data class ContactEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "contact_id") val contactId: Int,
+//  @ColumnInfo(name = "id") val id: Int = 0,
+    @PrimaryKey @ColumnInfo(name = "contact_id") val contactId: String,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "phone") val phone: String
+    @ColumnInfo(name = "phone") var phone: String = "",
 )
