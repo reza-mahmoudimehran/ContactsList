@@ -18,8 +18,10 @@
             android:layout_height="64dp"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:textColor="@color/black"
-            android:text="@{contact.name}"
+            android:textColor="@color/white"
+            android:background="@drawable/ic_circle"
+            app:phoneNumber="@{contact.phone}"
+            app:name="@{contact.name}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
