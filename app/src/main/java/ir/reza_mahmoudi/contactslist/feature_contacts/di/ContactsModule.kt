@@ -39,7 +39,6 @@ abstract class ContactsModule {
         fun provideContentResolver(application: Application): ContentResolver =
             application.contentResolver
 
-        @Singleton
         @ContactObserverCoroutineScope
         @Provides
         fun provideCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)

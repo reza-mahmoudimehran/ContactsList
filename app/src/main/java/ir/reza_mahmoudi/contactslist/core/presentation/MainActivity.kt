@@ -22,6 +22,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel.contactsLastTimestamp?.let {
+            observingContactsChanges()
+        }
+    }
+    fun observingContactsChanges(){
         if (checkContactsPermission()) {
             viewModel.startObservingContacts()
         } else {
@@ -29,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.READ_CONTACTS),
                 CONTACTS_PERMISSION_REQUEST_CODE)
         }
-
     }
 
     private fun checkContactsPermission(): Boolean {
@@ -47,8 +51,6 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CONTACTS_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             viewModel.startObservingContacts()
-        } else {
-            Toast.makeText(this, "We need contacts permission",Toast.LENGTH_LONG).show()
         }
     }
 }
