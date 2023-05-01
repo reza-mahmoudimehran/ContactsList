@@ -8,6 +8,8 @@ import android.provider.ContactsContract
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.preferences.PreferencesKeys
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.ReadDataStoreItemUseCase
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.SaveDataStoreItemUseCase
+import ir.reza_mahmoudi.contactslist.core.util.log.showLog
+import ir.reza_mahmoudi.contactslist.core.util.log.showLogError
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverCoroutineScope
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverHandler
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_new_contacts.usecase.AddNewContactsUseCase
@@ -60,18 +62,32 @@ class ContactListObserver @Inject constructor(
             }
         }
     }
+    fun unregister() {
+        contentResolver.unregisterContentObserver(this)
+    }
+    fun register() {
+        contentResolver.registerContentObserver(
+            ContactsContract.DeletedContacts.CONTENT_URI,
+            true,
+            this
+        )
+    }
 
     private fun getContactNumbers(lastTimestamp: Long): HashMap<Long, ArrayList<String>> {
         val contactsNumberMap = HashMap<Long, ArrayList<String>>()
 
-        val selection =
-            "${ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP} > $lastTimestamp"
+        showLog("num time", lastTimestamp.toString())
+//        val selection =
+//            "${ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP} > $lastTimestamp"
+
+        val selection = ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP + " > ?"
+        val selectionArgs = arrayOf(lastTimestamp.toString())
 
         val cursor: Cursor? = contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
             selection,
-            null,
+            selectionArgs,
             null
         )
         cursor?.use { contactsCursor ->
@@ -87,6 +103,7 @@ class ContactListObserver @Inject constructor(
 
                     if (contactsNumberMap.containsKey(contactId)) {
                         contactsNumberMap[contactId]?.add(number)
+//                        showLog("number ",number)
                     } else {
                         contactsNumberMap[contactId] = arrayListOf(number)
                     }
@@ -99,6 +116,7 @@ class ContactListObserver @Inject constructor(
     private suspend fun getContactsItems(lastTimestamp: Long): List<ContactEntity> {
         val contactsList = ArrayList<ContactEntity>()
 
+        showLog("name time", lastTimestamp.toString())
         val projection = arrayOf(
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
@@ -124,12 +142,17 @@ class ContactListObserver @Inject constructor(
             val nameIndex = contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val timeIndex =
                 contactsCursor.getColumnIndex(ContactsContract.Contacts.CONTACT_LAST_UPDATED_TIMESTAMP)
+//            val deletedContactIndex = contactsCursor.getColumnIndex(ContactsContract.DeletedContacts.CONTACT_ID)
+
 
             if (contactsCursor.moveToFirst()) {
                 newTimestamp = contactsCursor.getLong(timeIndex)
                 do {
                     val id = contactsCursor.getLong(idIndex)
                     val name = contactsCursor.getString(nameIndex)
+//                    val deletedContactId = contactsCursor.getLong(deletedContactIndex)
+//                    showLogError("del", "$deletedContactId")
+                    showLog(msg =  "$name  $id")
                     if (name != null) {
                         contactsList.add(ContactEntity(id, name))
                     }
