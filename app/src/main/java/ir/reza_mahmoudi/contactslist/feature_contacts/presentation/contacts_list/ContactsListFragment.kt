@@ -30,11 +30,13 @@ class ContactsListFragment : Fragment() {
     private val viewModel: ContactsViewModel by viewModels()
     private lateinit var mActivity: MainActivity
     private lateinit var binding: FragmentContactsListBinding
+    private lateinit var contactsAdapter: ContactsListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mActivity = requireActivity() as MainActivity
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,25 +52,36 @@ class ContactsListFragment : Fragment() {
     }
 
     private fun fetchContacts() {
-        if (viewModel.contactsLastTimestamp == null){
+        if (viewModel.contactsLastTimestamp == null) {
             checkContactsPermission()
-        }else{
+        } else {
             viewModel.getLocalContactsList()
         }
     }
+
     private fun fetchContactsFirstTime() {
         viewModel.getPhoneContactsList()
         mActivity.observingContactsChanges()
     }
 
-    private fun setupViews() {}
+    private fun setupViews() {
+        contactsAdapter = ContactsListAdapter()
+
+        binding.rcvContactsList.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.VERTICAL, false
+            )
+            adapter = contactsAdapter
+        }
+    }
 
     private fun collectData() {
         lifecycleScope.launch {
             launch {
                 viewModel.contactsList.collectLatest {
-                    if (!it.isNullOrEmpty()){
-                        binding.txtContactsList.text = it.toString()
+                    if (!it.isNullOrEmpty()) {
+                        contactsAdapter.setData(it)
                     }
                 }
             }
@@ -88,12 +101,14 @@ class ContactsListFragment : Fragment() {
             requestPermission(permission)
         }
     }
-    private fun requestPermission(permission: String){
+
+    private fun requestPermission(permission: String) {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
                 fetchContactsFirstTime()
             } else {
-                Toast.makeText(requireActivity(), "We need contacts permission",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(), "We need contacts permission", Toast.LENGTH_LONG)
+                    .show()
             }
         }.launch(permission)
     }

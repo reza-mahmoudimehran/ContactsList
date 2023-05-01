@@ -8,7 +8,7 @@ import ir.reza_mahmoudi.contactslist.core.util.view.ListDiffUtil
 import ir.reza_mahmoudi.contactslist.databinding.ItemContactBinding
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 
-class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>(){
+class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>() {
 
     private var contacts = emptyList<ContactEntity>()
 
@@ -21,9 +21,9 @@ class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>
         holder.bind(contacts[position])
     }
 
-    override fun getItemCount(): Int =contacts.size
+    override fun getItemCount(): Int = contacts.size
 
-    fun setData(newMoviesList: List<ContactEntity>){
+    fun setData(newMoviesList: List<ContactEntity>) {
         val contactsDiffUtil =
             ListDiffUtil(contacts, newMoviesList)
         val diffUtilResult = DiffUtil.calculateDiff(contactsDiffUtil)
@@ -31,9 +31,10 @@ class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>
         diffUtilResult.dispatchUpdatesTo(this)
     }
 
-    class ViewHolder(private val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(contact: ContactEntity){
-            binding.contact=contact
+    class ViewHolder(private val binding: ItemContactBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(contact: ContactEntity) {
+            binding.contact = contact
         }
     }
 }
