@@ -11,5 +11,7 @@ class ContactsRepositoryImpl @Inject constructor(
 ) : ContactsRepository {
     override fun getContactsList(): Flow<List<ContactEntity>> = contactsDao.getContactsList()
 
+    override fun deleteContactsByIds(itemIds: List<Long>) = contactsDao.deleteContactsByIds(itemIds)
+
     override fun addNewContacts(items: List<ContactEntity>) = contactsDao.addNewContacts(items)
 }

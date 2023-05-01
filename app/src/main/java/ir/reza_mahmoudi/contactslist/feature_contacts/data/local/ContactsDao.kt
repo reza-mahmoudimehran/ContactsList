@@ -14,6 +14,9 @@ interface ContactsDao {
     @Query("SELECT * FROM $CONTACTS_TABLE_NAME ORDER BY name")
     fun getContactsList(): Flow<List<ContactEntity>>
 
+    @Query("DELETE FROM $CONTACTS_TABLE_NAME WHERE contact_id IN (:itemIds)")
+    fun deleteContactsByIds(itemIds: List<Long>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addNewContacts(items: List<ContactEntity>)
 }
