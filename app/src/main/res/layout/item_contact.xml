@@ -13,11 +13,45 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtAvatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="@{contact.name}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{contact.name}"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@+id/txtAvatar"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{contact.phone}"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            app:layout_constraintStart_toEndOf="@+id/txtAvatar"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_40"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
