@@ -5,10 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".feature_contacts.presentation.contacts_list.ContactsListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/txtContactsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment" />
+    </ScrollView>
 
 </FrameLayout>

@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContactsDao {
-    @Query("SELECT * FROM $CONTACTS_TABLE_NAME")
-    suspend fun getContactsList(): Flow<List<ContactEntity>>
+    @Query("SELECT * FROM $CONTACTS_TABLE_NAME ORDER BY name")
+    fun getContactsList(): Flow<List<ContactEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNewContacts(items: List<ContactEntity>)
+    fun addNewContacts(items: List<ContactEntity>)
 }

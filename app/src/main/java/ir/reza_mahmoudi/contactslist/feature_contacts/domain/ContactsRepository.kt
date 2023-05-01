@@ -4,7 +4,7 @@ import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.Conta
 import kotlinx.coroutines.flow.Flow
 
 interface ContactsRepository {
-    suspend fun getContactsList(): Flow<List<ContactEntity>>
+    fun getContactsList(): Flow<List<ContactEntity>>
 
-    suspend fun addNewContacts(items: List<ContactEntity>)
+    fun addNewContacts(items: List<ContactEntity>)
 }

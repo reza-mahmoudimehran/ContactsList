@@ -10,8 +10,9 @@ import ir.reza_mahmoudi.contactslist.feature_contacts.util.constant.ContactsCons
     tableName = CONTACTS_TABLE_NAME
 )
 data class ContactEntity(
-//  @ColumnInfo(name = "id") val id: Int = 0,
-    @PrimaryKey @ColumnInfo(name = "contact_id") val contactId: String,
+    @ColumnInfo(name = "contact_id") val contactId: Long,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "phone") var phone: String = "",
-)
+    @PrimaryKey @ColumnInfo(name = "phone") var phone: String = "",
+){
+    override fun toString(): String = "$name -> $phone\n"
+}

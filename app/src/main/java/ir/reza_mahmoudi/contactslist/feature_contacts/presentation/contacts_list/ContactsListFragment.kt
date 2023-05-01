@@ -44,7 +44,8 @@ class ContactsListFragment : Fragment() {
         lifecycleScope.launch {
             launch {
                 viewModel.contactsList.collectLatest {
-                    showLog("contacts list", it.toString())
+                    binding.txtContactsList.text = it.toString()
+//                    showLog("contacts list", it.toString())
                 }
             }
         }
