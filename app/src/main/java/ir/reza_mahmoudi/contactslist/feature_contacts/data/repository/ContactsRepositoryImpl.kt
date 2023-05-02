@@ -11,12 +11,14 @@ class ContactsRepositoryImpl @Inject constructor(
 ) : ContactsRepository {
     override fun getContactsList(): Flow<List<ContactEntity>> = contactsDao.getContactsList()
 
-    override fun deleteContactsByIds(itemsNumber: List<Long>) = contactsDao.deleteContactsByIds(
-        itemsNumber
-    )
-    override fun deleteContactsByNumbers(itemsNumber: List<String>) = contactsDao.deleteContactsByNumbers(
+    override suspend fun deleteContactsByNumbers(itemsNumber: List<String>) = contactsDao.deleteContactsByNumbers(
         itemsNumber
     )
 
-    override fun addNewContacts(items: List<ContactEntity>) = contactsDao.addNewContacts(items)
+    override suspend fun addNewContacts(items: List<ContactEntity>) = contactsDao.addNewContacts(items)
+
+    override suspend fun deleteAndInsertContacts(
+        contactsToDelete: List<String>,
+        contactsToAdd: List<ContactEntity>
+    ) = contactsDao.deleteAndInsertContacts(contactsToDelete,contactsToAdd)
 }

@@ -6,9 +6,12 @@ import kotlinx.coroutines.flow.Flow
 interface ContactsRepository {
     fun getContactsList(): Flow<List<ContactEntity>>
 
-    fun deleteContactsByIds(itemsNumber: List<Long>)
+    suspend fun deleteContactsByNumbers(itemsNumber: List<String>)
 
-    fun deleteContactsByNumbers(itemsNumber: List<String>)
+    suspend fun addNewContacts(items: List<ContactEntity>)
 
-    fun addNewContacts(items: List<ContactEntity>)
+    suspend fun deleteAndInsertContacts(
+        contactsToDelete: List<String>,
+        contactsToAdd: List<ContactEntity>
+    )
 }
