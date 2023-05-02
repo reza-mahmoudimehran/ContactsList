@@ -6,6 +6,24 @@
 
     <fragment
         android:name="ir.reza_mahmoudi.contactslist.feature_contacts.presentation.contacts_list.ContactsListFragment"
-        android:id="@+id/frgContactsList"/>
+        android:id="@+id/frgContactsList">
+
+        <action
+            android:id="@+id/action_frgContactsList_to_frgContactDetails"
+            app:destination="@id/frgContactDetails">
+            <argument
+                android:name="contact"
+                app:argType="ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:name="ir.reza_mahmoudi.contactslist.feature_contacts.presentation.contact_details.ContactDetailsFragment"
+        android:id="@+id/frgContactDetails">
+        <argument
+            android:name="contact"
+            app:argType="ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

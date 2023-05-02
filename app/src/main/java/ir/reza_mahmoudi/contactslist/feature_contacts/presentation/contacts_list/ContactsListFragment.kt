@@ -2,7 +2,6 @@ package ir.reza_mahmoudi.contactslist.feature_contacts.presentation.contacts_lis
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,15 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import ir.reza_mahmoudi.contactslist.R
 import ir.reza_mahmoudi.contactslist.core.presentation.MainActivity
-import ir.reza_mahmoudi.contactslist.core.util.log.showLog
 import ir.reza_mahmoudi.contactslist.databinding.FragmentContactsListBinding
 import ir.reza_mahmoudi.contactslist.feature_contacts.presentation.ContactsViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -65,7 +62,13 @@ class ContactsListFragment : Fragment() {
     }
 
     private fun setupViews() {
-        contactsAdapter = ContactsListAdapter()
+        contactsAdapter = ContactsListAdapter { contact ->
+            findNavController().navigate(
+                ContactsListFragmentDirections.actionFrgContactsListToFrgContactDetails(
+                    contact
+                )
+            )
+        }
 
         binding.rcvContactsList.apply {
             layoutManager = LinearLayoutManager(

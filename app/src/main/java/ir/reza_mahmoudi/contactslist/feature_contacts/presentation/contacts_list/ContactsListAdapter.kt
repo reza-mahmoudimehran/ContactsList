@@ -8,7 +8,9 @@ import ir.reza_mahmoudi.contactslist.databinding.ItemContactBinding
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 import ir.reza_mahmoudi.contactslist.feature_contacts.util.view.ContactsListDiffUtil
 
-class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>() {
+class ContactsListAdapter(
+    private val onItemClick: (ContactEntity) -> Unit
+) : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>() {
 
     private var contacts = emptyList<ContactEntity>()
 
@@ -18,7 +20,9 @@ class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(contacts[position])
+        val contact = contacts[position]
+        holder.bind(contact)
+        holder.itemView.setOnClickListener { onItemClick(contact) }
     }
 
     override fun getItemCount(): Int = contacts.size
