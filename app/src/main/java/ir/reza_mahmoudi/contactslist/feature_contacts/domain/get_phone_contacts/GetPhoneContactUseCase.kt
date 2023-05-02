@@ -3,10 +3,12 @@ package ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_phone_contacts
 import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.ContactsContract
+import ir.reza_mahmoudi.contactslist.core.di.qualifiers.IoDispatcher
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.preferences.PreferencesKeys
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.ReadDataStoreItemUseCase
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.SaveDataStoreItemUseCase
 import ir.reza_mahmoudi.contactslist.core.util.log.showLog
+import ir.reza_mahmoudi.contactslist.core.util.log.showLogError
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverCoroutineScope
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_new_contacts.usecase.AddNewContactsUseCase
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
@@ -17,8 +19,10 @@ import javax.inject.Inject
 class GetPhoneContactUseCase @Inject constructor(
     private val readDataStoreItemUseCase: ReadDataStoreItemUseCase<Long>,
     private val saveDataStoreItemUseCase: SaveDataStoreItemUseCase<Long>,
+    private val saveContactIdsItemUseCase: SaveDataStoreItemUseCase<Set<String>>,
     private val addNewContactsUseCase: AddNewContactsUseCase,
     private val contentResolver: ContentResolver,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @ContactObserverCoroutineScope private val coroutineScope: CoroutineScope,
 ) {
 
@@ -30,6 +34,8 @@ class GetPhoneContactUseCase @Inject constructor(
             val lastTimestamp: Long? = contactsLastTimestampDeferred.await()
 
             if (lastTimestamp==null){
+                val contactsNumberSet: MutableSet<String> = mutableSetOf()
+
                 val contactsListAsync = async { getContactsItems() }
                 val contactNumbersAsync = async { getContactNumbers() }
 
@@ -48,11 +54,21 @@ class GetPhoneContactUseCase @Inject constructor(
                                     phone = it
                                 )
                             )
+                            contactsNumberSet.add(it)
                         }
                     }
                 }
-                launch {
+
+                launch(ioDispatcher) {
                     addNewContactsUseCase(contactsList)
+                }
+                launch(ioDispatcher) {
+                    saveContactIdsItemUseCase(
+                        SaveDataStoreItemUseCase.Params.create(
+                            PreferencesKeys.savedContactsNumberList,
+                            contactsNumberSet
+                        )
+                    )
                 }
             }
         }
@@ -128,7 +144,7 @@ class GetPhoneContactUseCase @Inject constructor(
             }
         }
         coroutineScope {
-            launch {
+            launch(ioDispatcher) {
                 saveDataStoreItemUseCase(
                     SaveDataStoreItemUseCase.Params.create(
                         PreferencesKeys.contactsLastTimestamp,

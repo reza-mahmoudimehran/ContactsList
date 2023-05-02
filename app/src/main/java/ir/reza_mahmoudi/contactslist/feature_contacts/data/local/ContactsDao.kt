@@ -17,6 +17,12 @@ interface ContactsDao {
     @Query("DELETE FROM $CONTACTS_TABLE_NAME WHERE contact_id IN (:itemIds)")
     fun deleteContactsByIds(itemIds: List<Long>)
 
+    @Query("DELETE FROM $CONTACTS_TABLE_NAME WHERE phone IN (:itemsNumber)")
+    fun deleteContactsByNumbers(itemsNumber: List<String>)
+
+//    @Query("DELETE FROM $CONTACTS_TABLE_NAME")
+//    fun deleteContactsByNumbers()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addNewContacts(items: List<ContactEntity>)
 }

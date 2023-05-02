@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ir.reza_mahmoudi.contactslist.core.util.view.ListDiffUtil
 import ir.reza_mahmoudi.contactslist.databinding.ItemContactBinding
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
+import ir.reza_mahmoudi.contactslist.feature_contacts.util.view.ContactsListDiffUtil
 
 class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>() {
 
@@ -25,7 +25,7 @@ class ContactsListAdapter : RecyclerView.Adapter<ContactsListAdapter.ViewHolder>
 
     fun setData(newMoviesList: List<ContactEntity>) {
         val contactsDiffUtil =
-            ListDiffUtil(contacts, newMoviesList)
+            ContactsListDiffUtil(contacts, newMoviesList)
         val diffUtilResult = DiffUtil.calculateDiff(contactsDiffUtil)
         contacts = newMoviesList
         diffUtilResult.dispatchUpdatesTo(this)

@@ -41,7 +41,7 @@ abstract class ContactsModule {
 
         @ContactObserverCoroutineScope
         @Provides
-        fun provideCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        fun provideCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob())
 
     }
 
