@@ -11,11 +11,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.reza_mahmoudi.contactslist.core.data.local.ContactsListDatabase
 import ir.reza_mahmoudi.contactslist.feature_contacts.data.repository.ContactsRepositoryImpl
+import ir.reza_mahmoudi.contactslist.feature_contacts.data.repository.PhoneContactsRepositoryImpl
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverCoroutineScope
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverHandler
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.ContactsRepository
+import ir.reza_mahmoudi.contactslist.feature_contacts.domain.PhoneContactsRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
@@ -48,5 +49,11 @@ abstract class ContactsModule {
     @Singleton
     @Binds
     abstract fun providesContactsRepository(contactsRepositoryImpl: ContactsRepositoryImpl): ContactsRepository
+
+    @Singleton
+    @Binds
+    abstract fun providesHandleContactsChangesRepository(
+        handleContactsChangesRepositoryImpl: PhoneContactsRepositoryImpl
+    ): PhoneContactsRepository
 
 }

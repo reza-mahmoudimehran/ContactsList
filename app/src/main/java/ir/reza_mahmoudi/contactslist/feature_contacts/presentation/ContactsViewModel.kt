@@ -5,11 +5,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.preferences.PreferencesKeys
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.ReadDataStoreItemUseCase
-import ir.reza_mahmoudi.contactslist.core.util.log.showLog
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_contacts_list.GetContactsListUseCase
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_phone_contacts.GetPhoneContactUseCase
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
