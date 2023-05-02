@@ -1,12 +1,15 @@
-package ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_contacts
+package ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_contacts
 
 import androidx.test.filters.SmallTest
+import com.google.common.truth.Truth.assertThat
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.ContactsRepository
-import ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_new_contacts.usecase.AddNewContactsUseCase
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
+import ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_contacts_list.GetContactsListUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
 import org.junit.After
@@ -15,12 +18,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
+
 
 @SmallTest
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class AddNewContactsUseCaseTest {
+class GetContactsListUseCaseTest {
 
     private val testDispatcher: TestDispatcher by lazy { StandardTestDispatcher() }
 
@@ -29,12 +34,12 @@ class AddNewContactsUseCaseTest {
     @Mock
     private lateinit var mockContactsRepository: ContactsRepository
 
-    private lateinit var addNewContactsUseCase: AddNewContactsUseCase
+    private lateinit var getContactsListUseCase: GetContactsListUseCase
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        addNewContactsUseCase = AddNewContactsUseCase(mockContactsRepository, testDispatcher)
+        getContactsListUseCase = GetContactsListUseCase(mockContactsRepository, testDispatcher)
     }
 
     @After
@@ -43,14 +48,22 @@ class AddNewContactsUseCaseTest {
     }
 
     @Test
-    fun `invoke should call addNewContacts on ContactsRepository`() {
+    fun `execute should return flow of contact list from repository`() {
         coroutineScope.launch {
             runTest {
-                val contactsList = listOf(ContactEntity(1L, "Reza"), ContactEntity(2L, "Ali"))
+                val contactList = listOf(ContactEntity(1L, "Reza"), ContactEntity(2L, "Ali"))
 
-                addNewContactsUseCase(contactsList)
+                val contactFlow = flow { emit(contactList) }
 
-                verify(mockContactsRepository).addNewContacts(contactsList)
+                `when`(mockContactsRepository.getContactsList()).thenReturn(contactFlow)
+
+                val resultFlow = getContactsListUseCase(Unit)
+
+                val result = resultFlow.toList()
+
+                verify(mockContactsRepository).getContactsList()
+
+                assertThat(result).isEqualTo(contactList)
             }
         }
     }
