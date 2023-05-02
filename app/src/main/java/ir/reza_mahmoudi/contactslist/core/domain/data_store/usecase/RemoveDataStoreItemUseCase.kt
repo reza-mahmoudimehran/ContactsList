@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 
-class RemoveDataStoreItemUseCase <T> @Inject constructor(
+class RemoveDataStoreItemUseCase<T> @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     @IoDispatcher dispatcher: CoroutineDispatcher
 ) : SuspendUseCase<Preferences.Key<T>, Unit>(dispatcher) {

@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 class GetPhoneContactUseCase @Inject constructor(
     private val phoneContactsRepository: PhoneContactsRepository
-): UseCase<Unit, Unit>() {
+) : UseCase<Unit, Unit>() {
     override fun execute(parameters: Unit) = phoneContactsRepository.fetchPhoneContacts()
 }

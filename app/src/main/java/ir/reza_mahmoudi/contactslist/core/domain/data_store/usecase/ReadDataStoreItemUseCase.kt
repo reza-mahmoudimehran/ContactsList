@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
-class ReadDataStoreItemUseCase <T> @Inject constructor(
+class ReadDataStoreItemUseCase<T> @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     @IoDispatcher dispatcher: CoroutineDispatcher
 ) : FlowUseCase<Preferences.Key<T>, T?>(dispatcher) {

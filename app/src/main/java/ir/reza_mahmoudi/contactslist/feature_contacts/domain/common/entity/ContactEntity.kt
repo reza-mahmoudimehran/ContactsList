@@ -16,6 +16,6 @@ data class ContactEntity(
     @ColumnInfo(name = "contact_id") val contactId: Long,
     @ColumnInfo(name = "name") val name: String,
     @PrimaryKey @ColumnInfo(name = "phone") var phone: String = "",
-): Parcelable {
+) : Parcelable {
     override fun toString(): String = "$name -> $phone\n"
 }

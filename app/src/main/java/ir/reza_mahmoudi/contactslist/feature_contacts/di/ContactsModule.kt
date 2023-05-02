@@ -10,11 +10,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.reza_mahmoudi.contactslist.core.data.local.ContactsListDatabase
-import ir.reza_mahmoudi.contactslist.feature_contacts.data.repository.ContactsRepositoryImpl
+import ir.reza_mahmoudi.contactslist.feature_contacts.data.repository.LocalContactsRepositoryImpl
 import ir.reza_mahmoudi.contactslist.feature_contacts.data.repository.PhoneContactsRepositoryImpl
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverCoroutineScope
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverHandler
-import ir.reza_mahmoudi.contactslist.feature_contacts.domain.ContactsRepository
+import ir.reza_mahmoudi.contactslist.feature_contacts.domain.LocalContactsRepository
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.PhoneContactsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -48,7 +48,7 @@ abstract class ContactsModule {
 
     @Singleton
     @Binds
-    abstract fun providesContactsRepository(contactsRepositoryImpl: ContactsRepositoryImpl): ContactsRepository
+    abstract fun providesContactsRepository(contactsRepositoryImpl: LocalContactsRepositoryImpl): LocalContactsRepository
 
     @Singleton
     @Binds

@@ -115,5 +115,4 @@ class ContactsListFragment : Fragment() {
             }
         }.launch(permission)
     }
-
 }

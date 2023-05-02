@@ -11,9 +11,6 @@ abstract class SuspendUseCase<in P, R>(private val coroutineDispatcher: Coroutin
         }
     }
 
-    /**
-     * Override this to set the code to be executed.
-     */
     @Throws(RuntimeException::class)
     protected abstract suspend fun execute(parameters: P): R
 }

@@ -37,6 +37,7 @@ class ContactsViewModel @Inject constructor(
             getLocalContactsList()
         }
     }
+
     fun getLocalContactsList() {
         viewModelScope.launch {
             getContactsListUseCase(Unit).collectLatest {

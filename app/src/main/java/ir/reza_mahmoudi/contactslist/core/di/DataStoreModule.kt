@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class DataStoreModule {
 
-    companion object{
+    companion object {
         @Singleton
         @Provides
         fun provideDataStore(

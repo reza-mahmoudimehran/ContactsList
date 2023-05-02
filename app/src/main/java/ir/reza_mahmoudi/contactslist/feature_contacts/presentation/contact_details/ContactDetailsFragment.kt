@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
-import ir.reza_mahmoudi.contactslist.R
 import ir.reza_mahmoudi.contactslist.databinding.FragmentContactDetailsBinding
-import ir.reza_mahmoudi.contactslist.databinding.FragmentContactsListBinding
-import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 
 class ContactDetailsFragment : Fragment() {
 

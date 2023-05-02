@@ -2,7 +2,7 @@ package ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_contacts
 
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
-import ir.reza_mahmoudi.contactslist.feature_contacts.domain.ContactsRepository
+import ir.reza_mahmoudi.contactslist.feature_contacts.domain.LocalContactsRepository
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.get_contacts_list.GetContactsListUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -32,14 +32,14 @@ class GetContactsListUseCaseTest {
     private val coroutineScope: CoroutineScope = CoroutineScope(testDispatcher)
 
     @Mock
-    private lateinit var mockContactsRepository: ContactsRepository
+    private lateinit var mockLocalContactsRepository: LocalContactsRepository
 
     private lateinit var getContactsListUseCase: GetContactsListUseCase
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        getContactsListUseCase = GetContactsListUseCase(mockContactsRepository, testDispatcher)
+        getContactsListUseCase = GetContactsListUseCase(mockLocalContactsRepository, testDispatcher)
     }
 
     @After
@@ -55,13 +55,13 @@ class GetContactsListUseCaseTest {
 
                 val contactFlow = flow { emit(contactList) }
 
-                `when`(mockContactsRepository.getContactsList()).thenReturn(contactFlow)
+                `when`(mockLocalContactsRepository.getContactsList()).thenReturn(contactFlow)
 
                 val resultFlow = getContactsListUseCase(Unit)
 
                 val result = resultFlow.toList()
 
-                verify(mockContactsRepository).getContactsList()
+                verify(mockLocalContactsRepository).getContactsList()
 
                 assertThat(result).isEqualTo(contactList)
             }

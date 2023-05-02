@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val readDataStoreItemUseCase: ReadDataStoreItemUseCase<Long>,
     private val contactListObserver: ContactListObserver,
-    ) : ViewModel() {
+) : ViewModel() {
 
     val contactsLastTimestamp = runBlocking {
         readDataStoreItemUseCase(PreferencesKeys.contactsLastTimestamp).first()

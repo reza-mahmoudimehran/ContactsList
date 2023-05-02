@@ -1,7 +1,7 @@
 package ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_contacts
 
 import androidx.test.filters.SmallTest
-import ir.reza_mahmoudi.contactslist.feature_contacts.domain.ContactsRepository
+import ir.reza_mahmoudi.contactslist.feature_contacts.domain.LocalContactsRepository
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_new_contacts.usecase.AddNewContactsUseCase
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 import kotlinx.coroutines.CoroutineScope
@@ -27,14 +27,14 @@ class AddNewContactsUseCaseTest {
     private val coroutineScope: CoroutineScope = CoroutineScope(testDispatcher)
 
     @Mock
-    private lateinit var mockContactsRepository: ContactsRepository
+    private lateinit var mockLocalContactsRepository: LocalContactsRepository
 
     private lateinit var addNewContactsUseCase: AddNewContactsUseCase
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        addNewContactsUseCase = AddNewContactsUseCase(mockContactsRepository, testDispatcher)
+        addNewContactsUseCase = AddNewContactsUseCase(mockLocalContactsRepository, testDispatcher)
     }
 
     @After
@@ -50,7 +50,7 @@ class AddNewContactsUseCaseTest {
 
                 addNewContactsUseCase(contactsList)
 
-                verify(mockContactsRepository).addNewContacts(contactsList)
+                verify(mockLocalContactsRepository).addNewContacts(contactsList)
             }
         }
     }

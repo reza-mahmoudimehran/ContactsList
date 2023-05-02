@@ -5,10 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import ir.reza_mahmoudi.contactslist.R
@@ -26,13 +24,16 @@ class MainActivity : AppCompatActivity() {
             observingContactsChanges()
         }
     }
-    fun observingContactsChanges(){
+
+    fun observingContactsChanges() {
         if (checkContactsPermission()) {
             viewModel.startObservingContacts()
         } else {
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(Manifest.permission.READ_CONTACTS),
-                CONTACTS_PERMISSION_REQUEST_CODE)
+                CONTACTS_PERMISSION_REQUEST_CODE
+            )
         }
     }
 
@@ -47,7 +48,12 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CONTACTS_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             viewModel.startObservingContacts()

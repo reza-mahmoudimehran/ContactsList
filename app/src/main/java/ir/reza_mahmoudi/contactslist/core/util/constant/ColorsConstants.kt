@@ -2,8 +2,8 @@ package ir.reza_mahmoudi.contactslist.core.util.constant
 
 import android.graphics.Color
 
-object ColorsConstants{
-    val AVATAR_COLORS= listOf(
+object ColorsConstants {
+    val AVATAR_COLORS = listOf(
         Color.parseColor("#FFF44336"),
         Color.parseColor("#FFE91E63"),
         Color.parseColor("#FF9C27B0"),
