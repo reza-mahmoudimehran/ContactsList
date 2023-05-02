@@ -4,12 +4,15 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.provider.ContactsContract
 import ir.reza_mahmoudi.contactslist.core.di.qualifiers.IoDispatcher
+import ir.reza_mahmoudi.contactslist.core.domain.common.usecase.UseCase
+import ir.reza_mahmoudi.contactslist.core.domain.data_store.DataStoreRepository
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.preferences.PreferencesKeys
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.ReadDataStoreItemUseCase
 import ir.reza_mahmoudi.contactslist.core.domain.data_store.usecase.SaveDataStoreItemUseCase
 import ir.reza_mahmoudi.contactslist.core.util.log.showLog
 import ir.reza_mahmoudi.contactslist.core.util.log.showLogError
 import ir.reza_mahmoudi.contactslist.feature_contacts.di.qualifiers.ContactObserverCoroutineScope
+import ir.reza_mahmoudi.contactslist.feature_contacts.domain.ContactsRepository
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.add_new_contacts.usecase.AddNewContactsUseCase
 import ir.reza_mahmoudi.contactslist.feature_contacts.domain.common.entity.ContactEntity
 import kotlinx.coroutines.*
@@ -17,23 +20,21 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class GetPhoneContactUseCase @Inject constructor(
-    private val readDataStoreItemUseCase: ReadDataStoreItemUseCase<Long>,
-    private val saveDataStoreItemUseCase: SaveDataStoreItemUseCase<Long>,
-    private val saveContactIdsItemUseCase: SaveDataStoreItemUseCase<Set<String>>,
-    private val addNewContactsUseCase: AddNewContactsUseCase,
+    private val contactsRepository: ContactsRepository,
+    private val dataStoreRepository: DataStoreRepository,
     private val contentResolver: ContentResolver,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @ContactObserverCoroutineScope private val coroutineScope: CoroutineScope,
-) {
+): UseCase<Unit, Unit>() {
 
-    operator fun invoke() {
+    override fun execute(parameters: Unit) {
         coroutineScope.launch {
             val contactsLastTimestampDeferred = coroutineScope.async {
-                readDataStoreItemUseCase(PreferencesKeys.contactsLastTimestamp).first()
+                dataStoreRepository.read(PreferencesKeys.contactsLastTimestamp).first()
             }
             val lastTimestamp: Long? = contactsLastTimestampDeferred.await()
 
-            if (lastTimestamp==null){
+            if (lastTimestamp == null) {
                 val contactsNumberSet: MutableSet<String> = mutableSetOf()
 
                 val contactsListAsync = async { getContactsItems() }
@@ -60,14 +61,12 @@ class GetPhoneContactUseCase @Inject constructor(
                 }
 
                 launch(ioDispatcher) {
-                    addNewContactsUseCase(contactsList)
+                    contactsRepository.addNewContacts(contactsList)
                 }
                 launch(ioDispatcher) {
-                    saveContactIdsItemUseCase(
-                        SaveDataStoreItemUseCase.Params.create(
-                            PreferencesKeys.savedContactsNumberList,
-                            contactsNumberSet
-                        )
+                    dataStoreRepository.save(
+                        PreferencesKeys.savedContactsNumberList,
+                        contactsNumberSet
                     )
                 }
             }
@@ -106,7 +105,7 @@ class GetPhoneContactUseCase @Inject constructor(
         return contactsNumberMap
     }
 
-    private suspend fun getContactsItems(): List<ContactEntity> {
+    private fun getContactsItems(): List<ContactEntity> {
         val contactsList = ArrayList<ContactEntity>()
 
         val projection = arrayOf(
@@ -143,15 +142,11 @@ class GetPhoneContactUseCase @Inject constructor(
                 } while (contactsCursor.moveToNext())
             }
         }
-        coroutineScope {
-            launch(ioDispatcher) {
-                saveDataStoreItemUseCase(
-                    SaveDataStoreItemUseCase.Params.create(
-                        PreferencesKeys.contactsLastTimestamp,
-                        newTimestamp
-                    )
-                )
-            }
+        coroutineScope.launch(ioDispatcher) {
+            dataStoreRepository.save(
+                PreferencesKeys.contactsLastTimestamp,
+                newTimestamp
+            )
         }
         return contactsList
     }

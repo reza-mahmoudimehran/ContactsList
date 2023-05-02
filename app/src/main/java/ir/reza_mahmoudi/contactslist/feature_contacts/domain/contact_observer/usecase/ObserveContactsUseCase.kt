@@ -81,7 +81,7 @@ class ObserveContactsUseCase @Inject constructor(
     }
 
 
-    private suspend fun getContactsItems(lastTimestamp: Long): List<ContactEntity> {
+    private fun getContactsItems(lastTimestamp: Long): List<ContactEntity> {
         val contactsList = ArrayList<ContactEntity>()
 
         val projection = arrayOf(
@@ -115,13 +115,11 @@ class ObserveContactsUseCase @Inject constructor(
                 } while (contactsCursor.moveToNext())
             }
         }
-        coroutineScope {
-            launch(ioDispatcher) {
-                dataStoreRepository.save(
-                    PreferencesKeys.contactsLastTimestamp,
-                    newTimestamp
-                )
-            }
+        coroutineScope.launch(ioDispatcher) {
+            dataStoreRepository.save(
+                PreferencesKeys.contactsLastTimestamp,
+                newTimestamp
+            )
         }
         return contactsList
     }
